@@ -6,10 +6,12 @@ import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.companyUser.CompanyUserReq;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
+import com.github.kop.rbac.module.req.user.UpdateUserReq;
 import com.github.kop.rbac.repo.CompanyUserRepository;
 import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.service.UserService;
 import com.github.kop.rbac.utils.CreateValidate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +28,11 @@ public class CompanyUserServiceImpl   extends UserServiceImpl implements Company
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public Long createCompanyUser(CompanyCreateUserReq req) {
-        companyUserCreateAndUpdateValidate.createUserValidate(req);
+        companyUserCreateAndUpdateValidate.createValidate(req);
         Long userId = create(req);
         if(req.getCompanyId()!=null){
             CompanyUserReq companyUserReq = new CompanyUserReq(userId, req.getCompanyId());
-            companyUserCreateAndUpdateValidate.createValidate(companyUserReq);
+            companyUserCreateAndUpdateValidate.createCompanyUserValidate(userId,req.getCompanyId());
             RbacCompanyUser rbacCompanyUser=new RbacCompanyUser();
             rbacCompanyUser.setUserId(userId);
             rbacCompanyUser.setCompanyId(req.getCompanyId());
@@ -39,19 +41,32 @@ public class CompanyUserServiceImpl   extends UserServiceImpl implements Company
         return userId;
     }
 
-    protected static final class CompanyUserCreateAndUpdateValidate extends UserServiceImpl  implements CreateValidate<CompanyUserReq>  {
-
-       public void createUserValidate(CompanyCreateUserReq req){
-
-           this.userCreateAndUpdateValidate.createValidate(req);
-       }
+    protected  final class CompanyUserCreateAndUpdateValidate extends UserCreateAndUpdateValidate<CompanyCreateUserReq>  {
+        @Override
+        public void createValidate(CompanyCreateUserReq createUserReq) throws ValidateException {
+            super.createValidate(createUserReq);
+        }
 
         @Override
-        public void createValidate(CompanyUserReq req) throws ValidateException {
-            if (req == null || req.getCompanyId() == null || req.getUserId() == null) {
-                throw new ValidateException("参数不正确");
+        public void updateValidate(UpdateUserReq updateUserReq) throws ValidateException {
+            super.updateValidate(updateUserReq);
+        }
+
+        @Override
+        public void idValidate(Long id) throws ValidateException {
+
+        }
+
+
+        public void createCompanyUserValidate(Long userId,Long companyId){
+            if(userId == null ){
+                throw new ValidateException("缺少用户id");
+            }
+            if(companyId == null) {
+                throw new  ValidateException("缺少企业id");
             }
         }
+
     }
 
     @Override

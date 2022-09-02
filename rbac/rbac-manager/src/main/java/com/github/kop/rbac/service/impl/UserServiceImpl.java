@@ -167,13 +167,13 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
-  protected class UserCreateAndUpdateValidate
-      implements CreateValidate<CreateUserReq>, UpdateValidate<UpdateUserReq> {
+  protected class UserCreateAndUpdateValidate<T extends CreateUserReq>
+      implements CreateValidate<T>, UpdateValidate<UpdateUserReq> {
 
 
 
     @Override
-    public void createValidate(CreateUserReq createUserReq) throws ValidateException {
+    public void createValidate(T createUserReq) throws ValidateException {
       String name = createUserReq.getName();
       if (StringUtils.isEmpty(name)) {
         throw new ValidateException("用户名必填");
