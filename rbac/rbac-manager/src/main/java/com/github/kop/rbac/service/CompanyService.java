@@ -21,5 +21,5 @@ public interface CompanyService {
 
   List<CompanyQueryRes> list(QueryCompanyReq req);
 
-  Long createUser(CompanyCreateUserReq req);
+
 }

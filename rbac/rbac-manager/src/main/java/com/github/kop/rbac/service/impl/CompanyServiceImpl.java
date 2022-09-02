@@ -36,15 +36,12 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyCreateAndUpdateValidate companyCreateAndUpdateValidate =
             new CompanyCreateAndUpdateValidate();
-    private final UserService userService;
-    public CompanyServiceImpl(UserService userService,CompanyRepository companyRepository) {
-        this.userService = userService;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository) {
+
         this.companyRepository = companyRepository;
     }
 
-
-    @Autowired
-    private CompanyUserService companyUserService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -148,17 +145,5 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
 
-    @Override
-    @Transactional(rollbackFor = {Exception.class})
-    public Long createUser(CompanyCreateUserReq req) {
-        CreateUserReq createUserReq = new CreateUserReq();
-        BeanUtils.copyProperties(req, createUserReq);
-        Long userId = userService.create(createUserReq);
-        if(req.getCompanyId()!=null){
-            CompanyUserReq companyUserReq = new CompanyUserReq(userId, req.getCompanyId());
-            this.companyUserService.createCompanyUser(companyUserReq);
-        }
 
-        return userId;
-    }
 }

@@ -2,8 +2,13 @@ package com.github.kop.rbac.service;
 
 
 import com.github.kop.rbac.module.req.companyUser.CompanyUserReq;
+import com.github.kop.rbac.module.req.user.CreateUserReq;
 
 public interface CompanyUserService {
 
-    int  createCompanyUser(CompanyUserReq req);
+    Long  createCompanyUser(CreateUserReq req);
+
+
+
+
 }

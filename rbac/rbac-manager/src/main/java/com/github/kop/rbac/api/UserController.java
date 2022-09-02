@@ -1,11 +1,13 @@
 package com.github.kop.rbac.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.kop.rbac.module.req.company.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.QueryUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.user.UserQueryRes;
+import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
   @Autowired private UserService userService;
+  @Autowired private CompanyUserService companyUserService;
 
   @ApiOperation(value = "创建用户")
   @PostMapping("/")
@@ -68,5 +71,14 @@ public class UserController {
   public RespVO<List<UserQueryRes>> list(@RequestBody QueryUserReq req) {
 
     return RespVO.success(userService.list(req));
+  }
+
+
+  @ApiOperation(value = "企业内创建用户")
+  @PostMapping("/createUser")
+  public RespVO<Boolean> createUser(@RequestBody CreateUserReq req) {
+
+
+    return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }
 }

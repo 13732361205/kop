@@ -9,6 +9,7 @@ import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.service.CompanyService;
+import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
     @Autowired private UserService userService;
+
 
     public CompanyController(CompanyService companyService) {
         this.companyService = companyService;
@@ -74,11 +76,6 @@ public class CompanyController {
         return RespVO.success(companyService.list(req));
     }
 
-    @ApiOperation(value = "企业内创建用户")
-    @PostMapping("/createUser")
-    public RespVO<Boolean> createUser(@RequestBody CompanyCreateUserReq req) {
 
-     return RespVO.success(companyService.createUser(req) != null);
-    }
 
 }

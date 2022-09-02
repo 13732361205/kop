@@ -10,15 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = {RbacApplication.class})
 public class UserServlceTest {
     @Autowired private CompanyService companyService;
+    @Autowired private CompanyUserService companyUserService;
 
     @org.junit.jupiter.api.Test
     void createUser(){
-        CompanyCreateUserReq createUserReq=new CompanyCreateUserReq();
+        CreateUserReq createUserReq=new CreateUserReq();
         createUserReq.setCompanyId(1564898952862621698L);
         createUserReq.setName("xiezhihao1@qq.com");
         createUserReq.setPassword("zhihaoAKB48");
         createUserReq.setPhone("12356555");
-        final Long user = companyService.createUser(createUserReq);
+        final Long user = companyUserService.createCompanyUser(createUserReq);
 
 
         Assertions.assertNotNull(user);
