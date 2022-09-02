@@ -29,7 +29,7 @@ public class UserController {
   @ApiOperation(value = "创建用户")
   @PostMapping("/")
   public RespVO<Boolean> create(@RequestBody CreateUserReq req) {
-    return RespVO.success(userService.create(req) > 0);
+    return RespVO.success(userService.create(req) != null);
   }
 
   @ApiOperation(value = "修改用户")

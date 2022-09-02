@@ -21,7 +21,11 @@ public class UserBindServiceImpl implements UserBindService {
 
   @Autowired private UserBindPostRepository userBindPostRepository;
   @Autowired private DeptService deptService;
-  @Autowired private PostService postService;
+   private final PostService postService;
+
+  public UserBindServiceImpl(PostService postService) {
+    this.postService = postService;
+  }
 
   @Override
   public String getBindDeptName(Long userId, Long companyId) {

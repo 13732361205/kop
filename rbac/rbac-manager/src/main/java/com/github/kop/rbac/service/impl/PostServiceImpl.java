@@ -34,7 +34,11 @@ public class PostServiceImpl implements PostService {
 
   @Autowired private PostRepository postRepository;
   @Autowired private DeptService deptService;
-  @Autowired private CompanyRepository companyRepository;
+  private final CompanyService companyService;
+
+  public PostServiceImpl(CompanyService companyService) {
+    this.companyService = companyService;
+  }
 
   @Override
   public int create(CreatePostReq req) {
@@ -90,9 +94,9 @@ public class PostServiceImpl implements PostService {
     if (deptQueryRes != null) {
       postQueryRes.setDeptName(deptQueryRes.getName());
     }
-    RbacCompany rbacCompany = companyRepository.byId(rbacPost.getCompanyId());
-    if (rbacCompany != null) {
-      postQueryRes.setCompanyName(rbacCompany.getName());
+    CompanyQueryRes companyQueryRes = companyService.byId(rbacPost.getCompanyId());
+    if (companyQueryRes != null) {
+      postQueryRes.setCompanyName(companyQueryRes.getName());
     }
     return postQueryRes;
   }

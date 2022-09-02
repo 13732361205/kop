@@ -36,7 +36,11 @@ public class UserServiceImpl implements UserService {
   @Autowired private UserRepository userRepository;
   @Autowired
   private UserBindService userBindService;
-  @Autowired private CompanyRepository companyRepository;
+  private final CompanyService companyService;
+
+  public UserServiceImpl(CompanyService companyService) {
+    this.companyService = companyService;
+  }
 
   @Override
   public Long create(CreateUserReq req) {
@@ -92,9 +96,9 @@ public class UserServiceImpl implements UserService {
     userQueryRes.setDeptName(
         userBindService.getBindDeptName(rbacUser.getId(), UserInfoThread.getCompanyId()));
 
-    RbacCompany rbacCompany = companyRepository.byId(UserInfoThread.getCompanyId());
-    if (rbacCompany != null) {
-      userQueryRes.setCompanyName(rbacCompany.getName());
+    CompanyQueryRes companyQueryRes = companyService.byId(UserInfoThread.getCompanyId());
+    if (companyQueryRes != null) {
+      userQueryRes.setCompanyName(companyQueryRes.getName());
     }
     userQueryRes.setMainPostName(
         userBindService.getBindMainPostName(rbacUser.getId(), UserInfoThread.getCompanyId()));

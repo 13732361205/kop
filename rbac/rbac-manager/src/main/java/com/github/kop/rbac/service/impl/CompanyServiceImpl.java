@@ -36,14 +36,16 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyCreateAndUpdateValidate companyCreateAndUpdateValidate =
             new CompanyCreateAndUpdateValidate();
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    public CompanyServiceImpl(UserService userService,CompanyRepository companyRepository) {
+        this.userService = userService;
+        this.companyRepository = companyRepository;
+    }
+
+
     @Autowired
     private CompanyUserService companyUserService;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
