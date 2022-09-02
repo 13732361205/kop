@@ -4,6 +4,7 @@ package com.github.kop.rbac.service.impl;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
 import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.companyUser.CompanyUserReq;
+import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.repo.CompanyUserRepository;
 import com.github.kop.rbac.service.CompanyUserService;
@@ -14,19 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CompanyUserServiceImpl implements CompanyUserService {
+public class CompanyUserServiceImpl   extends UserServiceImpl implements CompanyUserService {
 
     private final CompanyUserCreateAndUpdateValidate companyUserCreateAndUpdateValidate =
             new CompanyUserCreateAndUpdateValidate();
     @Autowired
     private CompanyUserRepository companyUserRepository;
-    @Autowired
-    private UserService  userService;
+
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public Long createCompanyUser(CreateUserReq req) {
-        Long userId = userService.create(req);
+    public Long createCompanyUser(CompanyCreateUserReq req) {
+        companyUserCreateAndUpdateValidate.createUserValidate(req);
+        Long userId = create(req);
         if(req.getCompanyId()!=null){
             CompanyUserReq companyUserReq = new CompanyUserReq(userId, req.getCompanyId());
             companyUserCreateAndUpdateValidate.createValidate(companyUserReq);
@@ -38,8 +39,12 @@ public class CompanyUserServiceImpl implements CompanyUserService {
         return userId;
     }
 
-    protected static final class CompanyUserCreateAndUpdateValidate implements CreateValidate<CompanyUserReq> {
+    protected static final class CompanyUserCreateAndUpdateValidate extends UserServiceImpl  implements CreateValidate<CompanyUserReq>  {
 
+       public void createUserValidate(CompanyCreateUserReq req){
+
+           this.userCreateAndUpdateValidate.createValidate(req);
+       }
 
         @Override
         public void createValidate(CompanyUserReq req) throws ValidateException {
@@ -47,5 +52,10 @@ public class CompanyUserServiceImpl implements CompanyUserService {
                 throw new ValidateException("参数不正确");
             }
         }
+    }
+
+    @Override
+    public Long create(CreateUserReq req) {
+        return super.create(req);
     }
 }

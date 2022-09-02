@@ -1,7 +1,6 @@
 package com.github.kop.rbac.service;
 
 import com.github.kop.rbac.RbacApplication;
-import com.github.kop.rbac.module.req.company.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;

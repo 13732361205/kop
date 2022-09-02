@@ -24,8 +24,11 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public Long create(RbacUser rbacUser) {
-     userMapper.insert(rbacUser);
-    return rbacUser.getId();
+     int i = userMapper.insert(rbacUser);
+     if(i ==1){
+       return rbacUser.getId();
+     }
+    return null;
   }
 
   @Override

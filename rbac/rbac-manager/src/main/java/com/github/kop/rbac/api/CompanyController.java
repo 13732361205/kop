@@ -1,19 +1,14 @@
 package com.github.kop.rbac.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.kop.rbac.module.req.company.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
 import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
-import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.service.CompanyService;
-import com.github.kop.rbac.service.CompanyUserService;
-import com.github.kop.rbac.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +19,6 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
-    @Autowired private UserService userService;
 
 
     public CompanyController(CompanyService companyService) {

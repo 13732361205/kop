@@ -19,6 +19,8 @@ import com.github.kop.rbac.utils.CreateValidate;
 import com.github.kop.rbac.utils.JwtTokenUtil;
 import com.github.kop.rbac.utils.UpdateValidate;
 import com.github.kop.rbac.utils.UserInfoThread;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -30,17 +32,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Getter
+@Setter
 public class UserServiceImpl implements UserService {
   protected final UserCreateAndUpdateValidate userCreateAndUpdateValidate =
       new UserCreateAndUpdateValidate();
+
+  public UserServiceImpl() {
+  }
+
   @Autowired private UserRepository userRepository;
   @Autowired
   private UserBindService userBindService;
-  private final CompanyService companyService;
+  @Autowired private  CompanyService companyService;
 
-  public UserServiceImpl(CompanyService companyService) {
-    this.companyService = companyService;
-  }
+
 
   @Override
   public Long create(CreateUserReq req) {
