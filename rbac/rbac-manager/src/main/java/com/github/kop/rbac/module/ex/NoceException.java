@@ -38,8 +38,8 @@ public class NoceException extends RuntimeException {
   }
 
   public NoceException(AppHttpCodeEnum enums) {
-    this.message=enums.getMsg();
-    this.code=enums.getCode();
+    this.message = enums.getMsg();
+    this.code = enums.getCode();
     this.enums = enums;
   }
 

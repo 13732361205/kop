@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = {RbacApplication.class})
 class CompanyServiceTest {
   @Autowired private CompanyService companyService;
-  @Autowired
-  private UserService userService;
+  @Autowired private UserService userService;
   @Autowired private CompanyUserService companyUserService;
 
   @org.junit.jupiter.api.Test
@@ -53,6 +52,4 @@ class CompanyServiceTest {
 
   @org.junit.jupiter.api.Test
   void list() {}
-
-
 }

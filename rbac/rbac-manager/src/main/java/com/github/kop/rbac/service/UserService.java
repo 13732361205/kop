@@ -22,6 +22,4 @@ public interface UserService {
   List<UserQueryRes> list(QueryUserReq req);
 
   UserLoginRes login(String username, String password, Long companyId);
-
-
 }

@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class LoginReq {
 
-    @ApiModelProperty(value = "账号")
-    private String username;
+  @ApiModelProperty(value = "账号")
+  private String username;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+  @ApiModelProperty(value = "密码")
+  private String password;
 }

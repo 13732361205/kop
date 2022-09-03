@@ -21,6 +21,5 @@ public class CreateUserReq {
   @ApiModelProperty(value = "密码")
   private String password;
 
-  @ApiModelProperty(value = "企业")
-  private Long companyId;
+
 }

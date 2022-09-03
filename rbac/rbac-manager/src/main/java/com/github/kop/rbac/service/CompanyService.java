@@ -19,6 +19,4 @@ public interface CompanyService {
   IPage<CompanyQueryRes> page(Long page, Long size, QueryCompanyReq req);
 
   List<CompanyQueryRes> list(QueryCompanyReq req);
-
-
 }

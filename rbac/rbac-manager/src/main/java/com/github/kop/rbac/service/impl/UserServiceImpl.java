@@ -1,7 +1,6 @@
 package com.github.kop.rbac.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.kop.rbac.module.entity.RbacCompany;
 import com.github.kop.rbac.module.entity.RbacUser;
 import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
@@ -10,7 +9,6 @@ import com.github.kop.rbac.module.req.user.UpdateUserReq;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.module.res.user.UserLoginRes;
 import com.github.kop.rbac.module.res.user.UserQueryRes;
-import com.github.kop.rbac.repo.CompanyRepository;
 import com.github.kop.rbac.repo.UserRepository;
 import com.github.kop.rbac.service.CompanyService;
 import com.github.kop.rbac.service.UserBindService;
@@ -19,17 +17,15 @@ import com.github.kop.rbac.utils.CreateValidate;
 import com.github.kop.rbac.utils.JwtTokenUtil;
 import com.github.kop.rbac.utils.UpdateValidate;
 import com.github.kop.rbac.utils.UserInfoThread;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Getter
@@ -38,15 +34,11 @@ public class UserServiceImpl implements UserService {
   protected final UserCreateAndUpdateValidate userCreateAndUpdateValidate =
       new UserCreateAndUpdateValidate();
 
-  public UserServiceImpl() {
-  }
+  public UserServiceImpl() {}
 
   @Autowired private UserRepository userRepository;
-  @Autowired
-  private UserBindService userBindService;
-  @Autowired private  CompanyService companyService;
-
-
+  @Autowired private UserBindService userBindService;
+  @Autowired private CompanyService companyService;
 
   @Override
   public Long create(CreateUserReq req) {
@@ -139,9 +131,6 @@ public class UserServiceImpl implements UserService {
 
   @Autowired private JwtTokenUtil jwtTokenUtil;
 
-
-
-
   @Override
   public UserLoginRes login(String username, String password, Long companyId) {
     RbacUser user =
@@ -169,8 +158,6 @@ public class UserServiceImpl implements UserService {
 
   protected class UserCreateAndUpdateValidate<T extends CreateUserReq>
       implements CreateValidate<T>, UpdateValidate<UpdateUserReq> {
-
-
 
     @Override
     public void createValidate(T createUserReq) throws ValidateException {

@@ -21,7 +21,7 @@ public class UserBindServiceImpl implements UserBindService {
 
   @Autowired private UserBindPostRepository userBindPostRepository;
   @Autowired private DeptService deptService;
-   private final PostService postService;
+  private final PostService postService;
 
   public UserBindServiceImpl(PostService postService) {
     this.postService = postService;

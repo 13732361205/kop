@@ -73,11 +73,9 @@ public class UserController {
     return RespVO.success(userService.list(req));
   }
 
-
   @ApiOperation(value = "企业内创建用户")
   @PostMapping("/createUser")
   public RespVO<Boolean> createUser(@RequestBody CompanyCreateUserReq req) {
-
 
     return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }

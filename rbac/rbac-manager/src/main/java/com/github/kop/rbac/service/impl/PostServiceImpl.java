@@ -1,7 +1,6 @@
 package com.github.kop.rbac.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.kop.rbac.module.entity.RbacCompany;
 import com.github.kop.rbac.module.entity.RbacPost;
 import com.github.kop.rbac.module.entity.RbacPostBindRoleGroup;
 import com.github.kop.rbac.module.ex.ValidateException;
@@ -11,7 +10,6 @@ import com.github.kop.rbac.module.req.post.UpdatePostReq;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.module.res.dept.DeptQueryRes;
 import com.github.kop.rbac.module.res.post.PostQueryRes;
-import com.github.kop.rbac.repo.CompanyRepository;
 import com.github.kop.rbac.repo.PostBindRoleGroupRepository;
 import com.github.kop.rbac.repo.PostRepository;
 import com.github.kop.rbac.service.CompanyService;
