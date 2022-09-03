@@ -25,12 +25,10 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
   @Override
   @Transactional(rollbackFor = {Exception.class})
   public Long createCompanyUser(CompanyCreateUserReq req) {
-    Long loginuserId = UserInfoThread.getUserId();
-    String token = jwtTokenUtil.generateToken(loginuserId);
-
+    Long companyId = UserInfoThread.getCompanyId();
+    req.setCompanyId(companyId);
     companyUserCreateAndUpdateValidate.createValidate(req);
     Long userId = create(req);
-
     RbacCompanyUser rbacCompanyUser = new RbacCompanyUser();
     rbacCompanyUser.setUserId(userId);
     rbacCompanyUser.setCompanyId(req.getCompanyId());

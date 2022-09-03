@@ -60,4 +60,11 @@ public class JwtTokenUtil {
   public Boolean validateToken(String token) {
     return !isTokenExpired(token);
   }
+
+  public String getUserId(String token) {
+    return getClaimFromToken(token, Claims::getSubject);
+  }
+  public String getCompanyId(String token) {
+    return getClaimFromToken(token, Claims::getSubject);
+  }
 }
