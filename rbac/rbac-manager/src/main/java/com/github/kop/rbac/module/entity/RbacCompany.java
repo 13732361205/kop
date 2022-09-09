@@ -65,4 +65,8 @@ public class RbacCompany implements Serializable {
   /** 社会信用编码 */
   @TableField("social_credit_code")
   private String socialCreditCode;
+
+  /** 企业父级id */
+  @TableField("pid")
+  private Long pid;
 }

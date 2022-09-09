@@ -1,6 +1,7 @@
 package com.github.kop.rbac.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.kop.rbac.module.req.company.AdminCreateCompanyReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
 import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
@@ -19,4 +20,6 @@ public interface CompanyService {
   IPage<CompanyQueryRes> page(Long page, Long size, QueryCompanyReq req);
 
   List<CompanyQueryRes> list(QueryCompanyReq req);
+
+    int adminCreateCompany(AdminCreateCompanyReq req);
 }

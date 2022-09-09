@@ -3,6 +3,7 @@ package com.github.kop.rbac.service.impl;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
+import com.github.kop.rbac.module.req.user.AdminBindReq;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
@@ -14,12 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUserService {
 
   private final CompanyUserCreateAndUpdateValidate companyUserCreateAndUpdateValidate =
       new CompanyUserCreateAndUpdateValidate();
-  @Autowired private CompanyUserRepository companyUserRepository;
+  @Autowired
+  private CompanyUserRepository companyUserRepository;
   @Autowired private JwtTokenUtil jwtTokenUtil;
 
   @Override
@@ -35,6 +40,21 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
     companyUserRepository.createCompanyUser(rbacCompanyUser);
 
     return userId;
+  }
+
+  @Override
+  @Transactional(rollbackFor = {Exception.class})
+  public int bindCompany(AdminBindReq req) {
+    if(UserInfoThread.getIsAdmin()){
+      throw new NoceException("不是admin用户无法操作");
+    }
+    if(!chenckRepetitionInsert(req.getUserId(),req.getCompanyId())){
+      throw  new NoceException("该用户与企业已建立绑定关系,不要重复绑定");
+    }
+    RbacCompanyUser rbacCompanyUser=new RbacCompanyUser();
+    rbacCompanyUser.setCompanyId(req.getCompanyId());
+    rbacCompanyUser.setUserId(req.getUserId());
+    return companyUserRepository.createCompanyUser(rbacCompanyUser);
   }
 
   protected final class CompanyUserCreateAndUpdateValidate
@@ -61,5 +81,28 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
   @Override
   public Long create(CreateUserReq req) {
     return super.create(req);
+  }
+
+
+  @Override
+  public Boolean chenckRepetitionInsert(Long userId, Long companyId) {
+    List<Long> conpanyIdList = getByUserId(userId);
+    boolean flag=true;
+    for(Long a:conpanyIdList){
+      if(a.equals(companyId)){
+        return flag=false;
+      }
+    }
+    return flag;
+  }
+
+  @Override
+  public List<Long> getByUserId(Long userId) {
+    List<RbacCompanyUser> rbacCompanyUserList = companyUserRepository.getByUserId(userId);
+    List<Long> conpanyIdList=new ArrayList<>();
+    rbacCompanyUserList.forEach(a->{
+      conpanyIdList.add(a.getCompanyId());
+    });
+    return conpanyIdList;
   }
 }

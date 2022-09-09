@@ -67,4 +67,8 @@ public class JwtTokenUtil {
   public String getCompanyId(String token) {
     return getClaimFromToken(token, Claims::getSubject);
   }
+
+  public String getUsername(String token) {
+    return getClaimFromToken(token, Claims::getSubject);
+  }
 }

@@ -1,10 +1,7 @@
 package com.github.kop.rbac.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
-import com.github.kop.rbac.module.req.user.CreateUserReq;
-import com.github.kop.rbac.module.req.user.QueryUserReq;
-import com.github.kop.rbac.module.req.user.UpdateUserReq;
+import com.github.kop.rbac.module.req.user.*;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.user.UserQueryRes;
 import com.github.kop.rbac.service.CompanyUserService;
@@ -83,4 +80,21 @@ public class UserController {
 
     return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }
+
+  @ApiOperation(value = "admin绑定企业与用户关系")
+  @PostMapping("/adminBindUserCompany")
+  public RespVO<Boolean> adminBindUserCompany(@RequestBody AdminBindReq req){
+
+    return RespVO.success(companyUserService.bindCompany(req)>0);
+  }
+
+  @ApiOperation(value = "admin绑定企业与角色关系")
+  @PostMapping("/adminBindUserRole")
+  public RespVO<Boolean> adminBindUserRole(@RequestBody  AdminBindRole
+                                            req){
+
+    return RespVO.success();
+  }
+
+
 }

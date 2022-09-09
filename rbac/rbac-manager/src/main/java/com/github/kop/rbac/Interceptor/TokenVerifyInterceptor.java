@@ -19,6 +19,7 @@ public class TokenVerifyInterceptor  implements HandlerInterceptor {
 
 
     private static final String TOKEN_HEADER = "token";
+    private static final String ADMIN="admin";
 
     @Resource
     private JwtTokenUtil jwtTokenUtil;
@@ -37,9 +38,12 @@ public class TokenVerifyInterceptor  implements HandlerInterceptor {
         }
         String userId = jwtTokenUtil.getUserId(token);
         String companyId = jwtTokenUtil.getCompanyId(token);
+        String username=jwtTokenUtil.getUsername(token);
+
         if (ObjectUtils.isEmpty(userId)||ObjectUtils.isEmpty(companyId)) {
             throw new NoceException("token无效");
         }
+        UserInfoThread.setIsAdmin(ADMIN.equals(username));
         UserInfoThread.setUserId(Long.parseLong(userId));
         UserInfoThread.setCompanyId(Long.parseLong(companyId));
         return true;

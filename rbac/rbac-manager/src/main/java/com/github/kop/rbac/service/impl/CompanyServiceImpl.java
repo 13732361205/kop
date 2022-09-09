@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.kop.rbac.module.entity.RbacCompany;
 import com.github.kop.rbac.module.enums.AppHttpCodeEnum;
 import com.github.kop.rbac.module.ex.ValidateException;
+import com.github.kop.rbac.module.req.company.AdminCreateCompanyReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
 import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
@@ -14,6 +15,8 @@ import com.github.kop.rbac.utils.CreateValidate;
 import com.github.kop.rbac.utils.UpdateValidate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.kop.rbac.utils.UserInfoThread;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +39,13 @@ public class CompanyServiceImpl implements CompanyService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public int create(CreateCompanyReq req) {
-    companyCreateAndUpdateValidate.createValidate(req);
-
+    req.setPid(UserInfoThread.getCompanyId());
+    companyCreateAndUpdateValidate.createSubordinateValidate(req);
     RbacCompany rbacCompany = new RbacCompany();
     rbacCompany.setName(req.getName());
     rbacCompany.setAddress(req.getAddress());
     rbacCompany.setSocialCreditCode(req.getSocialCreditCode());
+    rbacCompany.setPid(UserInfoThread.getCompanyId());
 
     return companyRepository.create(rbacCompany);
   }
@@ -108,10 +112,17 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   protected static class CompanyCreateAndUpdateValidate
-      implements CreateValidate<CreateCompanyReq>, UpdateValidate<UpdateCompanyReq> {
+      implements CreateValidate<AdminCreateCompanyReq>, UpdateValidate<UpdateCompanyReq> {
+
+    public void createSubordinateValidate(CreateCompanyReq req) throws ValidateException{
+      createValidate(req);
+      if(req.getPid() == null) {
+        throw new ValidateException("必须要有企业父级id");
+      }
+    }
 
     @Override
-    public void createValidate(CreateCompanyReq req) throws ValidateException {
+    public void createValidate(AdminCreateCompanyReq req) throws ValidateException {
       String name = req.getName();
       if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
         throw new ValidateException("企业名称必填");
@@ -129,5 +140,19 @@ public class CompanyServiceImpl implements CompanyService {
         throw new ValidateException("企业名称必填");
       }
     }
+  }
+
+
+  @Override
+  public int adminCreateCompany(AdminCreateCompanyReq req) {
+    if(!UserInfoThread.getIsAdmin()){
+      throw new ValidateException("非admin用户不能创建企业");
+    }
+    companyCreateAndUpdateValidate.createValidate(req);
+    RbacCompany rbacCompany=new RbacCompany();
+    rbacCompany.setAddress(req.getAddress());
+    rbacCompany.setName(req.getName());
+    rbacCompany.setSocialCreditCode(req.getSocialCreditCode());
+    return companyRepository.create(rbacCompany);
   }
 }
