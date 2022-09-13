@@ -3,7 +3,7 @@ package com.github.kop.rbac.service.impl;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
-import com.github.kop.rbac.module.req.user.AdminBindReq;
+import com.github.kop.rbac.module.req.user.UserBindCompanyReq;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
@@ -44,7 +44,7 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
 
   @Override
   @Transactional(rollbackFor = {Exception.class})
-  public int bindCompany(AdminBindReq req) {
+  public int bindCompany(UserBindCompanyReq req) {
     if(UserInfoThread.getIsAdmin()){
       throw new NoceException("不是admin用户无法操作");
     }

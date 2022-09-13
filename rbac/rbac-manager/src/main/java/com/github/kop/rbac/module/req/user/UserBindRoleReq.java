@@ -8,9 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(value = "admin绑定用户与角色")
-public class AdminBindRole extends AdminBindReq{
+@ApiModel(value = "用户绑定与角色关系")
+public class UserBindRoleReq extends UserReq {
 
     @ApiModelProperty(value = "角色id")
     private Long roleId;
+
+
 }

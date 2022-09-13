@@ -1,6 +1,6 @@
 package com.github.kop.rbac.service;
 
-import com.github.kop.rbac.module.req.user.AdminBindRole;
+import com.github.kop.rbac.module.req.user.UserBindRoleReq;
 
 public interface UserBindService {
 
@@ -23,7 +23,7 @@ public interface UserBindService {
   boolean unBindPost(long userID, long companyId, long postId);
 
   /**admin绑定用户和角色之间的关系*/
-  int    adminBindRole(AdminBindRole  req);
+  int    adminBindRole(UserBindRoleReq req);
 
 
 }

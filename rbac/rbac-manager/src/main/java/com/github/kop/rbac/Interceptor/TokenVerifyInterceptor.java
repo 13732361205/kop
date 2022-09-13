@@ -10,6 +10,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Acer
@@ -38,12 +40,19 @@ public class TokenVerifyInterceptor  implements HandlerInterceptor {
         }
         String userId = jwtTokenUtil.getUserId(token);
         String companyId = jwtTokenUtil.getCompanyId(token);
-        String username=jwtTokenUtil.getUsername(token);
+        String roleCode=jwtTokenUtil.getRole(token);
+        AtomicReference<Boolean> isAdmin= new AtomicReference<>(false);
+        Arrays.stream(roleCode.split(",")).forEach(a->{
+            if(a.equals(ADMIN)){
+                isAdmin.set(true);
+            }
+        });
+
 
         if (ObjectUtils.isEmpty(userId)||ObjectUtils.isEmpty(companyId)) {
             throw new NoceException("token无效");
         }
-        UserInfoThread.setIsAdmin(ADMIN.equals(username));
+        UserInfoThread.setIsAdmin(isAdmin.get());
         UserInfoThread.setUserId(Long.parseLong(userId));
         UserInfoThread.setCompanyId(Long.parseLong(companyId));
         return true;

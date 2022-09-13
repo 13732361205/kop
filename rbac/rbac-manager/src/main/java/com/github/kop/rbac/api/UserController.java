@@ -5,6 +5,7 @@ import com.github.kop.rbac.module.req.user.*;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.user.UserQueryRes;
 import com.github.kop.rbac.service.CompanyUserService;
+import com.github.kop.rbac.service.UserBindService;
 import com.github.kop.rbac.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,7 @@ public class UserController {
   @Qualifier("userServiceImpl")
   private UserService userService;
   @Autowired private CompanyUserService companyUserService;
+  @Autowired private UserBindService userBindService;
 
   @ApiOperation(value = "创建用户")
   @PostMapping("/")
@@ -81,19 +83,19 @@ public class UserController {
     return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }
 
-  @ApiOperation(value = "admin绑定企业与用户关系")
-  @PostMapping("/adminBindUserCompany")
-  public RespVO<Boolean> adminBindUserCompany(@RequestBody AdminBindReq req){
+  @ApiOperation(value = "用户绑定与企业的关系")
+  @PostMapping("/userBindCompany")
+  public RespVO<Boolean> userBindCompany(@RequestBody UserBindCompanyReq req){
 
     return RespVO.success(companyUserService.bindCompany(req)>0);
   }
 
-  @ApiOperation(value = "admin绑定企业与角色关系")
-  @PostMapping("/adminBindUserRole")
-  public RespVO<Boolean> adminBindUserRole(@RequestBody  AdminBindRole
+  @ApiOperation(value = "用户绑定与角色的关系")
+  @PostMapping("/userBindURole")
+  public RespVO<Boolean> userBindRole(@RequestBody UserBindRoleReq
                                             req){
 
-    return RespVO.success();
+    return RespVO.success(userBindService.adminBindRole(req)>0);
   }
 
 

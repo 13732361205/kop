@@ -8,9 +8,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel(value = "admin绑定必填参数")
-public class AdminBindReq  extends CompanyCreateUserReq{
+@ApiModel(value = "用户绑定企业必填参数")
+public class UserBindCompanyReq  extends UserReq{
 
-    @ApiModelProperty(value = "用户id")
-    private Long userId;
+
+
+
+    @ApiModelProperty(value = "企业")
+    private Long companyId;
 }

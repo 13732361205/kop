@@ -71,4 +71,8 @@ public class JwtTokenUtil {
   public String getUsername(String token) {
     return getClaimFromToken(token, Claims::getSubject);
   }
+
+  public String getRole(String token) {
+    return getClaimFromToken(token, Claims::getSubject);
+  }
 }

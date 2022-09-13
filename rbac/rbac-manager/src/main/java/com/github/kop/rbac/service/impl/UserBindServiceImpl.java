@@ -5,7 +5,7 @@ import com.github.kop.rbac.module.entity.RbacUserBindPost;
 import com.github.kop.rbac.module.entity.RbacUserBindRole;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
-import com.github.kop.rbac.module.req.user.AdminBindRole;
+import com.github.kop.rbac.module.req.user.UserBindRoleReq;
 import com.github.kop.rbac.module.res.dept.DeptQueryRes;
 import com.github.kop.rbac.module.res.post.PostQueryRes;
 import com.github.kop.rbac.repo.UserBindDeptRepository;
@@ -100,7 +100,7 @@ public class UserBindServiceImpl implements UserBindService {
 
   @Override
   @Transactional(rollbackFor = {Exception.class})
-  public int adminBindRole(AdminBindRole req) {
+  public int adminBindRole(UserBindRoleReq req) {
     if(UserInfoThread.getIsAdmin()) {
       throw new NoceException("非admin不允许操作");
     }
