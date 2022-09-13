@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
       userLoginRes.setGrade(user.getGrade());
       userLoginRes.setCompanyId(user.getCompanyId());
 
-      userLoginRes.setToken(jwtTokenUtil.generateToken(user.getId()));
+      userLoginRes.setToken(jwtTokenUtil.generateToken(user.getId(),null));
       // 初始化用户关联信息
       String bindDeptName = this.userBindService.getBindDeptName(user.getId(), companyId);
       userLoginRes.setDeptName(bindDeptName);

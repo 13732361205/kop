@@ -3,6 +3,7 @@ package com.github.kop.rbac.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +42,10 @@ public class JwtTokenUtil {
   }
 
   // generate token for user
-  public String generateToken(Long userId) {
-    Map<String, Object> claims = new HashMap<>();
+  public String generateToken(Long userId,Map<String, Object> claims ) {
+    if (claims == null) {
+      claims = new HashMap<>();
+    }
     return doGenerateToken(claims, userId.toString());
   }
 
@@ -65,14 +68,13 @@ public class JwtTokenUtil {
     return getClaimFromToken(token, Claims::getSubject);
   }
   public String getCompanyId(String token) {
-    return getClaimFromToken(token, Claims::getSubject);
+    final Claims claims = getAllClaimsFromToken(token);
+    return (String)claims.get("companyId");
   }
 
-  public String getUsername(String token) {
-    return getClaimFromToken(token, Claims::getSubject);
-  }
 
   public String getRole(String token) {
-    return getClaimFromToken(token, Claims::getSubject);
+    final Claims claims = getAllClaimsFromToken(token);
+    return (String)claims.get("role");
   }
 }
