@@ -3,6 +3,7 @@ package com.github.kop.rbac.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.kop.rbac.module.entity.RbacCompany;
 import com.github.kop.rbac.module.enums.AppHttpCodeEnum;
+import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.company.AdminCreateCompanyReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
@@ -54,6 +55,10 @@ public class CompanyServiceImpl implements CompanyService {
   @Override
   public int update(UpdateCompanyReq req) {
     companyCreateAndUpdateValidate.updateValidate(req);
+    Long companyId = UserInfoThread.getCompanyId();
+    if(!req.getId().equals(companyId)) {
+    throw new NoceException("只能修改自己当前所在的企业");
+    }
 
     RbacCompany company = this.companyRepository.byId(req.getId());
 
