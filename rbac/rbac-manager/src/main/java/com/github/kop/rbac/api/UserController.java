@@ -83,12 +83,6 @@ public class UserController {
     return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }
 
-  @ApiOperation(value = "用户绑定与企业的关系")
-  @PostMapping("/userBindCompany")
-  public RespVO<Boolean> userBindCompany(@RequestBody UserBindCompanyReq req){
-
-    return RespVO.success(companyUserService.bindCompany(req)>0);
-  }
 
   @ApiOperation(value = "用户绑定与角色的关系")
   @PostMapping("/userBindURole")

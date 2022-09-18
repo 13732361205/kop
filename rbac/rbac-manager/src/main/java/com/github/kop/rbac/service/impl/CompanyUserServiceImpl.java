@@ -3,7 +3,6 @@ package com.github.kop.rbac.service.impl;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
-import com.github.kop.rbac.module.req.user.UserBindCompanyReq;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
@@ -42,20 +41,7 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
     return userId;
   }
 
-  @Override
-  @Transactional(rollbackFor = {Exception.class})
-  public int bindCompany(UserBindCompanyReq req) {
-    if(UserInfoThread.getIsAdmin()){
-      throw new NoceException("不是admin用户无法操作");
-    }
-    if(!chenckRepetitionInsert(req.getUserId(),req.getCompanyId())){
-      throw  new NoceException("该用户与企业已建立绑定关系,不要重复绑定");
-    }
-    RbacCompanyUser rbacCompanyUser=new RbacCompanyUser();
-    rbacCompanyUser.setCompanyId(req.getCompanyId());
-    rbacCompanyUser.setUserId(req.getUserId());
-    return companyUserRepository.createCompanyUser(rbacCompanyUser);
-  }
+
 
   protected final class CompanyUserCreateAndUpdateValidate
       extends UserCreateAndUpdateValidate<CompanyCreateUserReq> {
@@ -104,5 +90,16 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
       conpanyIdList.add(a.getCompanyId());
     });
     return conpanyIdList;
+  }
+
+
+  @Override
+  public Long companyBindUser(CompanyCreateUserReq req) {
+    companyUserCreateAndUpdateValidate.createValidate(req);
+    Long userId = create(req);
+    RbacCompanyUser rbacCompanyUser = new RbacCompanyUser();
+    rbacCompanyUser.setUserId(userId);
+    rbacCompanyUser.setCompanyId(req.getCompanyId());
+    return companyUserRepository.createCompanyUser(rbacCompanyUser);
   }
 }

@@ -5,13 +5,16 @@ import com.github.kop.rbac.module.entity.RbacCompany;
 import com.github.kop.rbac.module.enums.AppHttpCodeEnum;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
-import com.github.kop.rbac.module.req.company.AdminCreateCompanyReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
 import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
+import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
+import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.repo.CompanyRepository;
 import com.github.kop.rbac.service.CompanyService;
+import com.github.kop.rbac.service.CompanyUserService;
+import com.github.kop.rbac.service.UserService;
 import com.github.kop.rbac.utils.CreateValidate;
 import com.github.kop.rbac.utils.UpdateValidate;
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ import com.github.kop.rbac.utils.UserInfoThread;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,9 @@ public class CompanyServiceImpl implements CompanyService {
   private final CompanyCreateAndUpdateValidate companyCreateAndUpdateValidate =
       new CompanyCreateAndUpdateValidate();
 
+  @Autowired
+  private CompanyUserService companyUserService;
+
   public CompanyServiceImpl(CompanyRepository companyRepository) {
 
     this.companyRepository = companyRepository;
@@ -39,16 +47,22 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Transactional(rollbackFor = Exception.class)
   @Override
-  public int create(CreateCompanyReq req) {
-    req.setPid(UserInfoThread.getCompanyId());
-    companyCreateAndUpdateValidate.createSubordinateValidate(req);
+  public Long create(CreateCompanyReq req) {
+    companyCreateAndUpdateValidate.createValidate(req);
     RbacCompany rbacCompany = new RbacCompany();
     rbacCompany.setName(req.getName());
     rbacCompany.setAddress(req.getAddress());
     rbacCompany.setSocialCreditCode(req.getSocialCreditCode());
     rbacCompany.setPid(UserInfoThread.getCompanyId());
-
-    return companyRepository.create(rbacCompany);
+    Long companyId = companyRepository.create(rbacCompany);
+    CompanyCreateUserReq companyCreateUserReq=new CompanyCreateUserReq();
+    companyCreateUserReq.setCompanyId(companyId);
+    companyCreateUserReq.setName(req.getUsername());
+    companyCreateUserReq.setGrade(req.getGrade());
+    companyCreateUserReq.setPassword(req.getPassword());
+    companyCreateUserReq.setPhone(req.getPhone());
+    Long companyBindUserId = companyUserService.companyBindUser(companyCreateUserReq);
+    return companyBindUserId;
   }
 
   @Transactional(rollbackFor = Exception.class)
@@ -117,17 +131,12 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   protected static class CompanyCreateAndUpdateValidate
-      implements CreateValidate<AdminCreateCompanyReq>, UpdateValidate<UpdateCompanyReq> {
+      implements CreateValidate<CreateCompanyReq>, UpdateValidate<UpdateCompanyReq> {
 
-    public void createSubordinateValidate(CreateCompanyReq req) throws ValidateException{
-      createValidate(req);
-      if(req.getPid() == null) {
-        throw new ValidateException("必须要有企业父级id");
-      }
-    }
+
 
     @Override
-    public void createValidate(AdminCreateCompanyReq req) throws ValidateException {
+    public void createValidate(CreateCompanyReq req) throws ValidateException {
       String name = req.getName();
       if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
         throw new ValidateException("企业名称必填");
@@ -148,16 +157,5 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
 
-  @Override
-  public int adminCreateCompany(AdminCreateCompanyReq req) {
-    if(!UserInfoThread.getIsAdmin()){
-      throw new ValidateException("非admin用户不能创建企业");
-    }
-    companyCreateAndUpdateValidate.createValidate(req);
-    RbacCompany rbacCompany=new RbacCompany();
-    rbacCompany.setAddress(req.getAddress());
-    rbacCompany.setName(req.getName());
-    rbacCompany.setSocialCreditCode(req.getSocialCreditCode());
-    return companyRepository.create(rbacCompany);
-  }
+
 }

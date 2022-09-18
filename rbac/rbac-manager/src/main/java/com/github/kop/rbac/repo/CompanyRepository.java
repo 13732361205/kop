@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CompanyRepository {
 
-  int create(RbacCompany rbacCompany);
+  Long create(RbacCompany rbacCompany);
 
   int update(RbacCompany rbacCompany);
 

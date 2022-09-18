@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CompanyUserRepository {
 
-  int createCompanyUser(RbacCompanyUser rbacCompanyUser);
+  Long createCompanyUser(RbacCompanyUser rbacCompanyUser);
 
   List<RbacCompanyUser> getByUserId(Long  uesrId);
 }

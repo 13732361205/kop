@@ -1,18 +1,19 @@
 package com.github.kop.rbac.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.kop.rbac.module.req.company.AdminCreateCompanyReq;
 import com.github.kop.rbac.module.req.company.CreateCompanyReq;
 import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.service.CompanyService;
+import com.github.kop.rbac.service.CompanyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.function.ToDoubleBiFunction;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Api(value = "企业接口")
@@ -26,20 +27,15 @@ public class CompanyController {
     this.companyService = companyService;
   }
 
+  @Autowired
+  private CompanyUserService  companyUserService;
+
+
   @ApiOperation(value = "创建企业")
   @PostMapping("/")
   public RespVO<Boolean> create(@RequestBody CreateCompanyReq req) {
-    return RespVO.success(companyService.create(req) > 0);
+    return RespVO.success(companyService.create(req) != null);
   }
-
-
-  @ApiOperation(value = "admin创建顶层企业")
-  @PostMapping("/adminCreateCompany")
-  public RespVO<Boolean> adminCreateCompany(@RequestBody AdminCreateCompanyReq req){
-
-    return RespVO.success(companyService.adminCreateCompany(req) > 0);
-  }
-
 
 
   @ApiOperation(value = "修改企业")

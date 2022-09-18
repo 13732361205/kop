@@ -22,8 +22,12 @@ public class CompanyRepositoryImpl implements CompanyRepository {
   }
 
   @Override
-  public int create(RbacCompany rbacCompany) {
-    return this.rbacCompanyMapper.insert(rbacCompany);
+  public Long create(RbacCompany rbacCompany) {
+   this.rbacCompanyMapper.insert(rbacCompany);
+   if(rbacCompany.getId()!=null){
+     return rbacCompany.getId();
+   }
+    return null;
   }
 
   @Override

@@ -1,9 +1,7 @@
 package com.github.kop.rbac.repo.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
-import com.github.kop.rbac.module.entity.RbacDept;
 import com.github.kop.rbac.repo.CompanyUserRepository;
 import com.github.kop.rbac.repo.mapper.RbacCompanyUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,13 @@ public class CompanyUserRepositoryImpl implements CompanyUserRepository {
   @Autowired private RbacCompanyUserMapper rbacCompanyUserMapper;
 
   @Override
-  public int createCompanyUser(RbacCompanyUser rbacCompanyUser) {
-    return this.rbacCompanyUserMapper.insert(rbacCompanyUser);
+  public Long createCompanyUser(RbacCompanyUser rbacCompanyUser) {
+    this.rbacCompanyUserMapper.insert(rbacCompanyUser);
+    Long id = rbacCompanyUser.getId();
+    if(id == null){
+      return null;
+    }
+    return id ;
   }
 
   @Override
