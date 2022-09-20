@@ -32,7 +32,7 @@ public class CompanyController {
   private CompanyBindUserService companyBindUserService;
 
 
-  @ApiOperation(value = "创建企业,同步创建用户，并且将两边绑定")
+  @ApiOperation(value = "创建企业,同步创建用户，并将用户与角色做绑定，并且企业和用户做绑定")
   @PostMapping("/")
   public RespVO<Boolean> create(@RequestBody CreateCompanyReq req) {
     return RespVO.success(companyBindUserService.companyBindUser(req) != null);

@@ -12,6 +12,7 @@ import com.github.kop.rbac.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CompanyBindUserServiceImpl  implements CompanyBindUserService {
@@ -25,7 +26,9 @@ public class CompanyBindUserServiceImpl  implements CompanyBindUserService {
     @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long companyBindUser(CreateCompanyReq req) {
         Long companyId=companyService.create(req);
         CompanyCreateUserReq companyCreateUserReq=new CompanyCreateUserReq();
@@ -35,7 +38,7 @@ public class CompanyBindUserServiceImpl  implements CompanyBindUserService {
         companyCreateUserReq.setPassword(req.getPassword());
         companyCreateUserReq.setPhone(req.getPhone());
         Long userId=userService.create(companyCreateUserReq);
-        
+
         return bindUser(userId,companyId);
     }
 
