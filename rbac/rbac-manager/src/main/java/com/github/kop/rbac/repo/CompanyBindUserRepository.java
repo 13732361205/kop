@@ -4,7 +4,7 @@ import com.github.kop.rbac.module.entity.RbacCompanyUser;
 
 import java.util.List;
 
-public interface CompanyUserRepository {
+public interface CompanyBindUserRepository {
 
   Long createCompanyUser(RbacCompanyUser rbacCompanyUser);
 

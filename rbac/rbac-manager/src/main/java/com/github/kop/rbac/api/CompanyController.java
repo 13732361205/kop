@@ -7,7 +7,6 @@ import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.service.CompanyService;
-import com.github.kop.rbac.service.CompanyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -27,8 +26,7 @@ public class CompanyController {
     this.companyService = companyService;
   }
 
-  @Autowired
-  private CompanyUserService  companyUserService;
+  
 
 
   @ApiOperation(value = "创建企业")

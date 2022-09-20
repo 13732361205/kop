@@ -13,7 +13,6 @@ import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
 import com.github.kop.rbac.repo.CompanyRepository;
 import com.github.kop.rbac.service.CompanyService;
-import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.service.UserService;
 import com.github.kop.rbac.utils.CreateValidate;
 import com.github.kop.rbac.utils.UpdateValidate;
@@ -37,8 +36,9 @@ public class CompanyServiceImpl implements CompanyService {
   private final CompanyCreateAndUpdateValidate companyCreateAndUpdateValidate =
       new CompanyCreateAndUpdateValidate();
 
-  @Autowired
-  private CompanyUserService companyUserService;
+
+
+
 
   public CompanyServiceImpl(CompanyRepository companyRepository) {
 
@@ -61,8 +61,9 @@ public class CompanyServiceImpl implements CompanyService {
     companyCreateUserReq.setGrade(req.getGrade());
     companyCreateUserReq.setPassword(req.getPassword());
     companyCreateUserReq.setPhone(req.getPhone());
-    Long companyBindUserId = companyUserService.companyBindUser(companyCreateUserReq);
-    return companyBindUserId;
+    CompanyUserServiceImpl companyUserService=new CompanyUserServiceImpl();
+    companyUserService.createCompanyUser(companyCreateUserReq);
+    return companyId;
   }
 
   @Transactional(rollbackFor = Exception.class)

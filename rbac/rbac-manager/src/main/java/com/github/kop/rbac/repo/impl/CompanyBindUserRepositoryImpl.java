@@ -2,7 +2,7 @@ package com.github.kop.rbac.repo.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.kop.rbac.module.entity.RbacCompanyUser;
-import com.github.kop.rbac.repo.CompanyUserRepository;
+import com.github.kop.rbac.repo.CompanyBindUserRepository;
 import com.github.kop.rbac.repo.mapper.RbacCompanyUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @Transactional(rollbackFor = Exception.class)
-public class CompanyUserRepositoryImpl implements CompanyUserRepository {
+public class CompanyBindUserRepositoryImpl implements CompanyBindUserRepository {
 
   @Autowired private RbacCompanyUserMapper rbacCompanyUserMapper;
 

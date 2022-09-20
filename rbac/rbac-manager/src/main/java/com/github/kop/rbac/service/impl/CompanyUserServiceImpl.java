@@ -6,7 +6,8 @@ import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
-import com.github.kop.rbac.repo.CompanyUserRepository;
+import com.github.kop.rbac.repo.CompanyBindUserRepository;
+import com.github.kop.rbac.service.CompanyBindUserService;
 import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.utils.JwtTokenUtil;
 import com.github.kop.rbac.utils.UserInfoThread;
@@ -14,17 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Service
-public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUserService {
+public class CompanyUserServiceImpl extends UserServiceImpl  implements CompanyUserService {
 
   private final CompanyUserCreateAndUpdateValidate companyUserCreateAndUpdateValidate =
       new CompanyUserCreateAndUpdateValidate();
+
   @Autowired
-  private CompanyUserRepository companyUserRepository;
-  @Autowired private JwtTokenUtil jwtTokenUtil;
+  private CompanyBindUserService companyBindUserService;
+
 
   @Override
   @Transactional(rollbackFor = {Exception.class})
@@ -33,10 +34,7 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
     req.setCompanyId(companyId);
     companyUserCreateAndUpdateValidate.createValidate(req);
     Long userId = create(req);
-    RbacCompanyUser rbacCompanyUser = new RbacCompanyUser();
-    rbacCompanyUser.setUserId(userId);
-    rbacCompanyUser.setCompanyId(req.getCompanyId());
-    companyUserRepository.createCompanyUser(rbacCompanyUser);
+    companyBindUserService.companyBindUser(userId,companyId);
 
     return userId;
   }
@@ -70,36 +68,5 @@ public class CompanyUserServiceImpl extends UserServiceImpl implements CompanyUs
   }
 
 
-  @Override
-  public Boolean chenckRepetitionInsert(Long userId, Long companyId) {
-    List<Long> conpanyIdList = getByUserId(userId);
-    boolean flag=true;
-    for(Long a:conpanyIdList){
-      if(a.equals(companyId)){
-        return flag=false;
-      }
-    }
-    return flag;
-  }
 
-  @Override
-  public List<Long> getByUserId(Long userId) {
-    List<RbacCompanyUser> rbacCompanyUserList = companyUserRepository.getByUserId(userId);
-    List<Long> conpanyIdList=new ArrayList<>();
-    rbacCompanyUserList.forEach(a->{
-      conpanyIdList.add(a.getCompanyId());
-    });
-    return conpanyIdList;
-  }
-
-
-  @Override
-  public Long companyBindUser(CompanyCreateUserReq req) {
-    companyUserCreateAndUpdateValidate.createValidate(req);
-    Long userId = create(req);
-    RbacCompanyUser rbacCompanyUser = new RbacCompanyUser();
-    rbacCompanyUser.setUserId(userId);
-    rbacCompanyUser.setCompanyId(req.getCompanyId());
-    return companyUserRepository.createCompanyUser(rbacCompanyUser);
-  }
 }

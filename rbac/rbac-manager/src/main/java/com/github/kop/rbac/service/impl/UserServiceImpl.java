@@ -3,6 +3,7 @@ package com.github.kop.rbac.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.kop.rbac.module.entity.RbacUser;
 import com.github.kop.rbac.module.ex.ValidateException;
+import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.QueryUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
@@ -36,9 +37,12 @@ public class UserServiceImpl implements UserService {
 
   public UserServiceImpl() {}
 
-  @Autowired private UserRepository userRepository;
-  @Autowired private UserBindService userBindService;
-  @Autowired private CompanyService companyService;
+  @Autowired protected UserRepository userRepository;
+  @Autowired protected UserBindService userBindService;
+  @Autowired protected CompanyService companyService;
+
+
+
 
   @Override
   public Long create(CreateUserReq req) {

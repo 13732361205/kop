@@ -7,6 +7,7 @@ import com.github.kop.rbac.module.res.user.UserQueryRes;
 import com.github.kop.rbac.service.CompanyUserService;
 import com.github.kop.rbac.service.UserBindService;
 import com.github.kop.rbac.service.UserService;
+import com.github.kop.rbac.service.impl.CompanyUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -29,7 +30,10 @@ public class UserController {
   @Autowired
   @Qualifier("userServiceImpl")
   private UserService userService;
-  @Autowired private CompanyUserService companyUserService;
+  @Autowired
+  private CompanyUserService companyUserService;
+
+ 
   @Autowired private UserBindService userBindService;
 
   @ApiOperation(value = "创建用户")
@@ -79,7 +83,7 @@ public class UserController {
   @ApiOperation(value = "企业内创建用户")
   @PostMapping("/createUser")
   public RespVO<Boolean> createUser(@RequestBody CompanyCreateUserReq req) {
-
+    
     return RespVO.success(companyUserService.createCompanyUser(req) != null);
   }
 

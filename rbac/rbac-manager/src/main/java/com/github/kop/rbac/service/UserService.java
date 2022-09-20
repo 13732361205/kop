@@ -1,6 +1,7 @@
 package com.github.kop.rbac.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.QueryUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
@@ -22,4 +23,5 @@ public interface UserService {
   List<UserQueryRes> list(QueryUserReq req);
 
   UserLoginRes login(String username, String password, Long companyId);
+
 }
