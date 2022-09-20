@@ -1,15 +1,12 @@
 package com.github.kop.rbac.service.impl;
 
-import com.github.kop.rbac.module.entity.RbacCompanyUser;
 import com.github.kop.rbac.module.ex.NoceException;
 import com.github.kop.rbac.module.ex.ValidateException;
 import com.github.kop.rbac.module.req.user.CompanyCreateUserReq;
 import com.github.kop.rbac.module.req.user.CreateUserReq;
 import com.github.kop.rbac.module.req.user.UpdateUserReq;
-import com.github.kop.rbac.repo.CompanyBindUserRepository;
 import com.github.kop.rbac.service.CompanyBindUserService;
 import com.github.kop.rbac.service.CompanyUserService;
-import com.github.kop.rbac.utils.JwtTokenUtil;
 import com.github.kop.rbac.utils.UserInfoThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +31,7 @@ public class CompanyUserServiceImpl extends UserServiceImpl  implements CompanyU
     req.setCompanyId(companyId);
     companyUserCreateAndUpdateValidate.createValidate(req);
     Long userId = create(req);
-    companyBindUserService.companyBindUser(userId,companyId);
+    companyBindUserService.bindUser(userId,companyId);
 
     return userId;
   }

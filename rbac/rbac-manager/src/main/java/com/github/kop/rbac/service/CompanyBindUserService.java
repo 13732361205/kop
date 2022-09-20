@@ -1,7 +1,11 @@
 package com.github.kop.rbac.service;
 
 
+import com.github.kop.rbac.module.req.company.CreateCompanyReq;
+
 public interface CompanyBindUserService {
+
+    Long companyBindUser(CreateCompanyReq req);
     
-    Long companyBindUser(Long userId,Long conpanyId);
+    Long bindUser(Long userId,Long conpanyId);
 }

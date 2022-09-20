@@ -6,7 +6,9 @@ import com.github.kop.rbac.module.req.company.QueryCompanyReq;
 import com.github.kop.rbac.module.req.company.UpdateCompanyReq;
 import com.github.kop.rbac.module.res.RespVO;
 import com.github.kop.rbac.module.res.company.CompanyQueryRes;
+import com.github.kop.rbac.service.CompanyBindUserService;
 import com.github.kop.rbac.service.CompanyService;
+import com.github.kop.rbac.service.CompanyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -26,13 +28,14 @@ public class CompanyController {
     this.companyService = companyService;
   }
 
-  
+  @Autowired
+  private CompanyBindUserService companyBindUserService;
 
 
-  @ApiOperation(value = "创建企业")
+  @ApiOperation(value = "创建企业,同步创建用户，并且将两边绑定")
   @PostMapping("/")
   public RespVO<Boolean> create(@RequestBody CreateCompanyReq req) {
-    return RespVO.success(companyService.create(req) != null);
+    return RespVO.success(companyBindUserService.companyBindUser(req) != null);
   }
 
 
